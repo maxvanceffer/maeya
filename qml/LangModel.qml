@@ -6,4 +6,8 @@ XmlListModel {
 
     XmlRole { name: "title"; query: "@value/string()" }
     XmlRole { name: "key"; query: "@key/string()" }
+
+    onStatusChanged: {
+        if( status === XmlListModel.Ready ) console.log("Loaded "+count+" translation directions");
+    }
 }

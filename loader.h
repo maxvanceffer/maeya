@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QStringList>
 #include <QtNetwork/QNetworkAccessManager>
 
 class Loader : public QObject
@@ -19,6 +20,7 @@ public:
     Q_INVOKABLE QString languages() const;
     Q_INVOKABLE QString translation() const;
 
+
 signals:
     void languagesUpdated(QString);
     void translationUpdated(QString);
@@ -26,6 +28,7 @@ signals:
     void timeoutTranslate();
 
 public slots:
+    Q_INVOKABLE bool isTranslationDirectionAvailable( const QString& from, const QString& to ) const;
     Q_INVOKABLE void updateLanguages();
     Q_INVOKABLE void translate( QString, QString, QString );
 
@@ -40,6 +43,7 @@ private:
     QString locale;
     QString m_lang;
     QString m_trans;
+    QStringList m_directions;
 };
 
 #endif // LOADER_H

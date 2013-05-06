@@ -1,9 +1,16 @@
 <RCC>
     <qresource prefix="/">
+        <file>uk.png</file>
+        <file>be.png</file>
+        <file>bg.png</file>
+        <file>cs.png</file>
+        <file>de.png</file>
         <file>en.png</file>
-        <file>ru.png</file>
-        <file>ua.png</file>
+        <file>es.png</file>
         <file>fr.png</file>
+        <file>it.png</file>
+        <file>pl.png</file>
         <file>ro.png</file>
+        <file>ru.png</file>
     </qresource>
 </RCC>

@@ -7,7 +7,7 @@ Rectangle {
     property string currentKey: "en";
     property bool open: false
     property int side: 1;
-    property bool enableExtraRow: false;
+    property string otherPart: "en"
     color: "#303030";
 
     LangModel {
@@ -16,45 +16,56 @@ Rectangle {
         onStatusChanged: { if( status === XmlListModel.Ready ) listView.currentIndex = 0; }
     }
 
+    function validateDirection()
+    {
+
+    }
+
     // Define a delegate component.  A component will be
     // instantiated for each visible item in the list.
     Component {
         id: languageDelegate
         Item {
             id: wrapper
-            width: listView.width; height: 80;
+            width: listView.width; height: 60;
+            visible: side === 2 ? loader.isTranslationDirectionAvailable(otherPart,key) : true;
+            Text {
+                id: directionTitle
+                anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
+                color: "white"; font.pixelSize: 30
+                text: title; font.bold: true;
+            }
+            Rectangle { height: 2; width: parent.width * 0.6; color: "grey";
+                anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom; margins: 2; }
+            }
             MouseArea {
                 anchors.fill:  parent;
                 onClicked: {
-                    console.log("item clicked")
                     listView.currentIndex = index;
                     currentKey = key;
                     currentTitle = title;
+                    console.log("Current title " + currentTitle)
+                    console.log("Current title " + currentKey)
+                    console.log("item clicked")
                 }
-            }
-            Item {
-                Text {
-                    anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
-                    color: "white"; font.pixelSize: 32
-                    text: title; font.bold: true;
-                }
-                Rectangle { height: 2; width: parent.width * 0.7; color: "gray"; anchors { horizontalCenter: parent.horizontalCenter; bottom: parent.bottom } }
-            }
-            // indent the item if it is the current item
-            states: State {
-                name: "Current"
-                when: wrapper.ListView.isCurrentItem
-                PropertyChanges { target: wrapper; x: 20 }
-            }
-            transitions: Transition {
-                NumberAnimation { properties: "x"; duration: 200 }
             }
         }
     }
 
+//    Text {
+//        id: extraRow
+//        text: qsTr("Auto detect");
+//        height: 60; font.pixelSize: 30; color: "white";
+//        anchors{ top: parent.top; left: parent.left; right: parent.right; }
+//    }
+
+//    Rectangle { height: 2; width: parent.width * 0.6; color: "grey";
+//        anchors { horizontalCenter: parent.horizontalCenter; top: extraRow.bottom; margins: 2; }
+//    }
+
     ListView {
         id: listView
-        anchors { fill: parent; margins: 22; }
+        anchors.top: parent.top; anchors.left: parent.left; anchors.right: parent.right; anchors.bottom: parent.bottom;
         model: langModel
         delegate: languageDelegate
         focus: true

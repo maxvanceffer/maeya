@@ -20,22 +20,36 @@ Rectangle {
         color: "#303030";
         anchors.fill: parent;
         opacity: open ? 1 : 0;
+
         Behavior on opacity {
             NumberAnimation { duration: 300 }
         }
 
+        onCurrentTitleChanged: {
+            console.log("Left icon change");
+            leftButtonIcon.source  = "image://flags/"+currentKey;
+            leftButtonText.text    = currentTitle;
+            rightSideBar.otherPart = currentKey;
+            onLeftMenu();
+        }
     }
 
     LanguagePage {
         id: rightSideBar;
         side: 2;
-    }
+        color: "#303030";
+        anchors.fill: parent;
+        opacity: open ? 1 : 0;
+        Behavior on opacity {
+            NumberAnimation { duration: 300 }
+        }
 
-    /* this is what moves the normal view aside */
-    transform: Translate {
-        id: game_translate_
-        x: 0
-        Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutQuad } }
+        onCurrentTitleChanged: {
+            console.log("Right icon change")
+            rightButtonIcon.source = "image://flags/"+currentKey;
+            rightButtonText.text   = currentTitle;
+            onRightMenu();
+        }
     }
 
     /* this is the menu shadow */
@@ -51,18 +65,31 @@ Rectangle {
         border { left: 12; top: 12; right: 12; bottom: 12 }
     }
 
-    /* put this last to "steal" touch on the normal window when menu is shown */
-    MouseArea {
-        anchors.fill: parent
-        enabled: leftSideBar.open || rightSideBar.open;
-        onClicked: appWindow.onLeftMenu();
+    /* this is the menu shadow */
+    BorderImage {
+        id: menu_shadow_right
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right;
+        anchors.margins: 10
+        z: -1 /* this will place it below normal_view_ */
+        visible: leftSideBar.open || rightSideBar.open;
+        source: "images/shadow.png"
+        border { left: 12; top: 12; right: 12; bottom: 12 }
     }
 
     /* this functions toggles the menu and starts the animation */
     function onLeftMenu()
     {
         game_translate_.x = leftSideBar.open ? 0 : appWindow.width * 0.9
-        leftSideBar.open = !leftSideBar.open;
+        leftSideBar.open  = !leftSideBar.open;
+    }
+
+    /* this functions toggles the menu and starts the animation */
+    function onRightMenu()
+    {
+        game_translate_.x = -( rightSideBar.open ? 0 : appWindow.width * 0.9 )
+        rightSideBar.open  = !rightSideBar.open;
     }
 
     function layoutPortrait(){
@@ -113,7 +140,26 @@ Rectangle {
 
     Rectangle {
         id: body
-        anchors.fill: parent;
+        anchors.top: appWindow.top; anchors.bottom: appWindow.bottom;
+        anchors.left: appWindow.left; anchors.right: appWindow.right;
+
+        /* put this last to "steal" touch on the normal window when menu is shown */
+        MouseArea {
+            anchors.fill: parent
+            enabled: leftSideBar.open || rightSideBar.open;
+            z: 3000;
+            onClicked: {
+                if( rightSideBar.open ) appWindow.onRightMenu();
+                if( leftSideBar.open )  appWindow.onLeftMenu();
+            }
+        }
+
+        /* this is what moves the normal view aside */
+        transform: Translate {
+            id: game_translate_
+            x: 0
+            Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutQuad } }
+        }
 
         // Top tool bar
         Rectangle {
@@ -180,7 +226,6 @@ Rectangle {
                 Image {
                     id: leftButtonIcon
                     smooth: true; width: 64; height: 64;
-                    fillMode: Image.PreserveAspectCrop
                     anchors.left: parent.left; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
                     source: "image://flags/en";
@@ -191,9 +236,6 @@ Rectangle {
                     anchors.left: leftButtonIcon.right; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
                     text: leftSideBar.currentTitle ? leftSideBar.currentTitle : qsTr("Detect");
-                    onTextChanged: {
-                        leftButtonIcon.source = "image://flags/"+rightSideBar.currentKey;
-                    }
                 }
 
                 MouseArea { id: ma_; anchors.fill: parent; onClicked: appWindow.onLeftMenu(); }
@@ -210,7 +252,7 @@ Rectangle {
 
                 Image {
                     id: rightButtonIcon
-                    fillMode: Image.PreserveAspectCrop; width: 64; height: 64;
+                    width: 64; height: 64;
                     anchors.right: parent.right; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
                     source: "image://flags/en";
@@ -221,14 +263,11 @@ Rectangle {
                     anchors.right: rightButtonIcon.left; anchors.margins: 6;
                     anchors.verticalCenter: parent.verticalCenter;
                     text: rightSideBar.currentTitle ? rightSideBar.currentTitle : qsTr("Russian");
-                    onTextChanged: {
-                        rightButtonIcon.source = "image://flags/"+rightSideBar.currentKey;
-                    }
                 }
 
                 MouseArea {
                     anchors.fill: parent;
-                    onClicked: rightSideBar.trigger();
+                    onClicked: appWindow.onRightMenu();
                 }
 
             }
@@ -239,7 +278,6 @@ Rectangle {
                 width: 64; height: 64;
                 fillMode: Image.PreserveAspectCrop
                 anchors.centerIn: bottomToolBar;
-                z: 100000;
                 MouseArea {
                     clip: false
                     smooth: false
@@ -324,6 +362,7 @@ Rectangle {
                 onTextChanged: {
                     proccessing = false;
                     sequentialOpacity.stop();
+                    translateButton.opacity = 1;
                 }
             }
         }

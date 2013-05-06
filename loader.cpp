@@ -26,6 +26,21 @@ Loader::Loader(QObject *parent):QObject(parent)
 void Loader::setLanguages(QString source )
 {
     m_lang = source;
+
+    XMLNode root = XMLNode::parseString(source.toLatin1(),"Langs");
+    XMLNode dirs = root.getChildNode("dirs");
+    if( !dirs.isEmpty() )
+    {
+        const int& count = dirs.nChildNode("string");
+        for( int i = 0; i < count; i++ )
+        {
+            m_directions << dirs.getChildNode("string",i).getText();
+        }
+    }
+
+    qDebug()<<"Directions updated "<<m_directions;
+
+    emit languagesUpdated(m_lang);
 }
 
 void Loader::setTranslation(QString source)
@@ -41,6 +56,13 @@ QString Loader::languages() const
 QString Loader::translation() const
 {
     return m_trans;
+}
+
+bool Loader::isTranslationDirectionAvailable(const QString &from, const QString &to) const
+{
+    QString direction = QString("%1-%2").arg(from,to);
+    qDebug()<<"Checking if available translation "<<direction<<" = "<<m_directions.contains(direction);
+    return m_directions.contains(direction);
 }
 
 void Loader::updateLanguages()
@@ -80,11 +102,8 @@ void Loader::langsResponse()
 {
     QNetworkReply * impl = qobject_cast<QNetworkReply*>(QObject::sender());
     if( !impl ) return;
-
-    m_lang = impl->readAll();
     impl->deleteLater();
-
-    emit languagesUpdated(m_lang);
+    setLanguages(impl->readAll());
 }
 
 void Loader::transResponse()
