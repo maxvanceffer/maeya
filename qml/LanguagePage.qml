@@ -29,6 +29,12 @@ Rectangle {
             id: wrapper
             width: listView.width; height: 60;
             visible: side === 2 ? loader.isTranslationDirectionAvailable(otherPart,key) : true;
+            Image {
+                id: directionIcon
+                width: 24; height: 24;
+                anchors.right: directionTitle.left; anchors.verticalCenter: parent.verticalCenter;
+                source: "image://flags/"+key;
+            }
             Text {
                 id: directionTitle
                 anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }

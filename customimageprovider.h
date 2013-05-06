@@ -20,10 +20,9 @@ public:
         QString sid = QString(id).remove("image://");
         QLocale loc(sid);
         QPixmap pix;
-        qDebug()<<"Requiested sid "<<":/"+loc.languageToString(loc.language()).left(2).toLower()+".png";
-        if( pix.load(":/"+loc.languageToString(loc.language()).left(2).toLower()+".png") )
+        qDebug()<<"lang name "<<loc.name()<<" language "<<loc.languageToString(loc.language());
+        if( pix.load(":/"+loc.name().split("_").first()+".png") )
         {
-            qDebug()<<"Pixmpa file found";
             if (requestedSize.isValid())
                 return pix.scaled(requestedSize, Qt::KeepAspectRatio);
             else
