@@ -16,9 +16,11 @@ Rectangle {
         onStatusChanged: { if( status === XmlListModel.Ready ) listView.currentIndex = 0; }
     }
 
-    function validateDirection()
+    function dropIndex()
     {
-
+        if( !listView.currentItem.visible ){
+            listView.positionViewAtBeginning();
+        }
     }
 
     // Define a delegate component.  A component will be

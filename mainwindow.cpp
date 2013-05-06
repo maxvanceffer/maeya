@@ -28,7 +28,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->gridLayout->addWidget(view);
 
     QDir dir(qApp->applicationDirPath());
-    qDebug()<<"Path "<<dir.absolutePath();
 
     ImageProvider * provider = new ImageProvider(this);
     view->engine()->addImageProvider(QLatin1String("flags"),provider);

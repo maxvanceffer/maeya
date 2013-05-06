@@ -187,6 +187,16 @@ Rectangle {
             }
 
             Image {
+                id: bookmarksButton
+                anchors.left: minimzeButton.right; anchors.verticalCenter: parent.verticalCenter;
+                source: "images/bookmarks.png"
+                MouseArea {
+                    anchors.fill: parent;
+                    onClicked: { console.log("not implemented") }
+                }
+            }
+
+            Image {
                 id: minimzeButton
                 width: 64;
                 fillMode: Image.PreserveAspectCrop
@@ -347,6 +357,25 @@ Rectangle {
                        easing.amplitude: 100
                        duration: 200
                    }
+            }
+        }
+
+        Image {
+            id: change
+            width: 52; height: 52;
+            anchors.left: sourceTextRectangle.left; anchors.bottom: sourceTextRectangle.bottom;
+            source: "/home/developer/projects/maeya/qml/images/refresh.png"
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    if( targetText.text.length ) {
+                        sourceText.text = targetText.text;
+                        leftSideBar.currentKey = rightSideBar.currentKey;
+                        leftSideBar.currentTitle = rightSideBar.currentTitle;
+                        targetText.text = "";
+                        rightSideBar.dropIndex();
+                    }
+                }
             }
         }
 
