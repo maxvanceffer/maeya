@@ -1,39 +1,45 @@
-# Add more folders to ship with the application, here
-folder_01.source = qml/maeya
-folder_01.target = qml
-DEPLOYMENTFOLDERS = folder_01
+# Add files and directories to ship with the application
+# by adapting the examples below.
+#file1.source = myfile
+dir1.source = qml
+dir1.path   = /bin/qml
+DEPLOYMENTFOLDERS = dir1 # file1
 
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
-
-symbian:TARGET.UID3 = 0xE05A5148
+symbian:TARGET.UID3 = 0xE2D293D1
 
 # Smart Installer package's UID
-# This UID is from the protected range and therefore the package will
-# fail to install if self-signed. By default qmake uses the unprotected
-# range value if unprotected UID is defined for the application and
-# 0x2002CCCF value if protected UID is given to the application
+# This UID is from the protected range
+# and therefore the package will fail to install if self-signed
+# By default qmake uses the unprotected range value if unprotected UID is defined for the application
+# and 0x2002CCCF value if protected UID is given to the application
 #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
 
 # Allow network access on Symbian
 symbian:TARGET.CAPABILITY += NetworkServices
 
-# If your application uses the Qt Mobility libraries, uncomment the following
-# lines and add the respective components to the MOBILITY variable.
-# CONFIG += mobility
-# MOBILITY +=
+# If your application uses the Qt Mobility libraries, uncomment
+# the following lines and add the respective components to the
+# MOBILITY variable.
+CONFIG += mobility
+MOBILITY += sensors
 
-# Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-CONFIG += qdeclarative-boostable
-
-# Add dependency to Symbian components
-# CONFIG += qt-components
-
-# The .cpp file which was generated for your project. Feel free to hack it.
-SOURCES += main.cpp
+SOURCES += main.cpp mainwindow.cpp \
+    loader.cpp \
+    xmlParser.cpp \
+    clipboard.cpp
+HEADERS += mainwindow.h \
+    loader.h \
+    orientatationfilter.h \
+    xmlParser.h \
+    clipboard.h \
+    customimageprovider.h
+FORMS += mainwindow.ui
+RESOURCES += flags/resource.qrc
+QT += declarative core gui network
+CONFIG += qdbus
 
 # Please do not modify the following two lines. Required for deployment.
-include(qmlapplicationviewer/qmlapplicationviewer.pri)
+include(deployment.pri)
 qtcAddDeployment()
 
 OTHER_FILES += \
