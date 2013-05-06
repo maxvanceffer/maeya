@@ -173,22 +173,23 @@ Rectangle {
                 id: leftButton
                 anchors.left: bottomToolBar.left;
                 anchors.top: bottomToolBar.top; anchors.bottom: bottomToolBar.bottom;
+                anchors.leftMargin: 10
                 width: (bottomToolBar.width / 3);
                 color: "transparent";
 
                 Image {
                     id: leftButtonIcon
-                    smooth: true
+                    smooth: true; width: 64; height: 64;
                     fillMode: Image.PreserveAspectCrop
                     anchors.left: parent.left; anchors.margins: 4;
-                    anchors.top: parent.top; anchors.bottom: parent.bottom;
+                    anchors.verticalCenter: parent.verticalCenter;
                     source: "image://flags/en";
                 }
 
                 Text {
                     id: leftButtonText;
                     anchors.left: leftButtonIcon.right; anchors.margins: 4;
-                    anchors.top: leftButton.top; anchors.bottom: leftButton.bottom;
+                    anchors.verticalCenter: parent.verticalCenter;
                     text: leftSideBar.currentTitle ? leftSideBar.currentTitle : qsTr("Detect");
                     onTextChanged: {
                         leftButtonIcon.source = "image://flags/"+rightSideBar.currentKey;
@@ -203,21 +204,22 @@ Rectangle {
                 id: rightButton
                 anchors.right: bottomToolBar.right;
                 anchors.top: bottomToolBar.top; anchors.bottom: bottomToolBar.bottom;
+                anchors.rightMargin: 10
                 width: (bottomToolBar.width/3);
                 color: "transparent";
 
                 Image {
                     id: rightButtonIcon
-                    fillMode: Image.PreserveAspectCrop
+                    fillMode: Image.PreserveAspectCrop; width: 64; height: 64;
                     anchors.right: parent.right; anchors.margins: 4;
-                    anchors.top: parent.top; anchors.bottom: parent.bottom;
+                    anchors.verticalCenter: parent.verticalCenter;
                     source: "image://flags/en";
                 }
 
                 Text {
                     id: rightButtonText;
-                    anchors.right: rightButtonIcon.left; anchors.margins: 4;
-                    anchors.top: rightButton.top; anchors.bottom: rightButton.bottom;
+                    anchors.right: rightButtonIcon.left; anchors.margins: 6;
+                    anchors.verticalCenter: parent.verticalCenter;
                     text: rightSideBar.currentTitle ? rightSideBar.currentTitle : qsTr("Russian");
                     onTextChanged: {
                         rightButtonIcon.source = "image://flags/"+rightSideBar.currentKey;
@@ -234,7 +236,7 @@ Rectangle {
             Image {
                 id: translateButton
                 source: "images/translate.png";
-                width: 80; height: 80;
+                width: 64; height: 64;
                 fillMode: Image.PreserveAspectCrop
                 anchors.centerIn: bottomToolBar;
                 z: 100000;
@@ -265,7 +267,7 @@ Rectangle {
                         properties: "opacity"
                         from: 1
                         to: 0
-                        duration: 900
+                        duration: 600
                         easing {type: Easing.InOutQuad; }
                     }
                     NumberAnimation {
@@ -274,9 +276,10 @@ Rectangle {
                         properties: "opacity"
                         to: 0
                         from: 1
-                        duration: 900
+                        duration: 600
                         easing {type: Easing.InOutQuad;}
                     }
+                    ColorAnimation { from: "gray"; to: "white"; duration: 200 }
                     loops: Animation.Infinite
                 }
             }
