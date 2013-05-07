@@ -7,12 +7,6 @@ Rectangle {
     property bool proccessing: false;
     property int  orentation:  -1;
 
-    // background
-    Image {
-        id: background
-        anchors.fill: parent;
-        source: "images/background.png"
-    }
 
     LanguagePage {
         id: leftSideBar
@@ -93,10 +87,10 @@ Rectangle {
     }
 
     function layoutPortrait(){
-        sourceTextRectangle.width  = width/2;
-        sourceTextRectangle.height = height-bottomToolBar.height;
-        sourceTextRectangle.x      = 0;
-        sourceTextRectangle.y      = topToolBar.height;
+        sourceTextRectangle.width  = (width/2) - 8;
+        sourceTextRectangle.height = height - bottomToolBar.height - 8;
+        sourceTextRectangle.x      = 4;
+        sourceTextRectangle.y      = topToolBar.height + 4;
 
         targetTextRectangle.width  = sourceTextRectangle.width;
         targetTextRectangle.height = sourceTextRectangle.height;
@@ -106,22 +100,26 @@ Rectangle {
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
         leftSideBar.width  = appWindow.width;
+
+        change.rotation = 0;
     }
 
     function layoutLandscape(){
-        sourceTextRectangle.width  = width;
-        sourceTextRectangle.height = (height - (bottomToolBar.height + topToolBar.height))/2;
-        sourceTextRectangle.x      = 0;
-        sourceTextRectangle.y      = topToolBar.height;
+        sourceTextRectangle.width  = width - 8;
+        sourceTextRectangle.height = ((height - (bottomToolBar.height + topToolBar.height))/2) - 8;
+        sourceTextRectangle.x      = 4;
+        sourceTextRectangle.y      = topToolBar.height + 4;
 
-        targetTextRectangle.width  = sourceTextRectangle.width;
-        targetTextRectangle.height = sourceTextRectangle.height;
-        targetTextRectangle.x      = 0;
-        targetTextRectangle.y      = topToolBar.height + sourceTextRectangle.height;
+        targetTextRectangle.width  = sourceTextRectangle.width - 2;
+        targetTextRectangle.height = sourceTextRectangle.height - 2;
+        targetTextRectangle.x      = 2;
+        targetTextRectangle.y      = topToolBar.height + sourceTextRectangle.height -2;
 
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
         leftSideBar.width  = appWindow.width;
+
+        change.rotation = 90;
     }
 
     onWidthChanged: {
@@ -142,6 +140,13 @@ Rectangle {
         id: body
         anchors.top: appWindow.top; anchors.bottom: appWindow.bottom;
         anchors.left: appWindow.left; anchors.right: appWindow.right;
+
+        // background
+        Image {
+            id: background
+            anchors.fill: parent;
+            source: "images/background.png"
+        }
 
         /* put this last to "steal" touch on the normal window when menu is shown */
         MouseArea {
@@ -335,7 +340,7 @@ Rectangle {
 
         Rectangle {
             id: sourceTextRectangle;
-            color: "gray"; opacity: 0.8;
+            color: "white"; opacity: 0.6;
             radius: 5;
             TextEdit {
                 id: sourceText
@@ -363,9 +368,10 @@ Rectangle {
         Image {
             id: change
             width: 52; height: 52;
-            anchors.left: sourceTextRectangle.left; anchors.bottom: sourceTextRectangle.bottom;
-            source: "/home/developer/projects/maeya/qml/images/refresh.png"
+            anchors.bottom: sourceTextRectangle.bottom;
+            source: "images/change.png";
             MouseArea {
+                rotation: 0
                 anchors.fill: parent;
                 onClicked: {
                     if( targetText.text.length ) {

@@ -18,9 +18,7 @@ Rectangle {
 
     function dropIndex()
     {
-        if( !listView.currentItem.visible ){
-            listView.positionViewAtBeginning();
-        }
+        listView.currentIndex = 0;
     }
 
     // Define a delegate component.  A component will be
@@ -34,7 +32,8 @@ Rectangle {
             Image {
                 id: directionIcon
                 width: 24; height: 24;
-                anchors.right: directionTitle.left; anchors.verticalCenter: parent.verticalCenter;
+                anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter;
+                anchors.leftMargin: 95;
                 source: "image://flags/"+key;
             }
             Text {
@@ -59,17 +58,6 @@ Rectangle {
             }
         }
     }
-
-//    Text {
-//        id: extraRow
-//        text: qsTr("Auto detect");
-//        height: 60; font.pixelSize: 30; color: "white";
-//        anchors{ top: parent.top; left: parent.left; right: parent.right; }
-//    }
-
-//    Rectangle { height: 2; width: parent.width * 0.6; color: "grey";
-//        anchors { horizontalCenter: parent.horizontalCenter; top: extraRow.bottom; margins: 2; }
-//    }
 
     ListView {
         id: listView
