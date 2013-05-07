@@ -172,11 +172,54 @@ Rectangle {
             anchors.top: body.top; anchors.left: body.left; anchors.right: body.right;
             height: 64;
             z: 3000;
+
             Image {
                 id: topToolBarBackground
                 source: "images/toolbar.png"
                 anchors.fill: parent;
             }
+
+            Row {
+                id: topToolBarLayout
+                anchors.fill: parent;
+                spacing: 4;
+                Image {
+                    id: minimzeButton
+                    width: 64;
+                    fillMode: Image.PreserveAspectCrop
+                    source: "images/minimize.png"; smooth: true;
+                    MouseArea {
+                        smooth: true
+                        anchors.fill: parent;
+                        onClicked: window.minimize();
+                    }
+                }
+
+                Image {
+                    id: bookmarksButton
+                    source: "images/bookmarks.png"
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: { console.log("not implemented") }
+                    }
+                }
+
+                Image {
+                    id: aboutButton
+                    width: 64; height: 64;
+                    fillMode: Image.PreserveAspectFit
+//                    fillMode: Image.
+                    source: "images/about.png"
+                    MouseArea {
+                        anchors.fill: parent;
+                        onClicked: {
+                            console.log("not implemented")
+                        }
+                    }
+                }
+
+            }
+
 
             Image {
                 id: closeButton
@@ -188,30 +231,6 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: window.close();
-                }
-            }
-
-            Image {
-                id: bookmarksButton
-                anchors.left: minimzeButton.right; anchors.verticalCenter: parent.verticalCenter;
-                source: "images/bookmarks.png"
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: { console.log("not implemented") }
-                }
-            }
-
-            Image {
-                id: minimzeButton
-                width: 64;
-                fillMode: Image.PreserveAspectCrop
-                anchors.left: topToolBar.left; anchors.margins: 4
-                anchors.top:  topToolBar.top; anchors.bottom: topToolBar.bottom;
-                source: "images/minimize.png"; smooth: true;
-                MouseArea {
-                    smooth: true
-                    anchors.fill: parent;
-                    onClicked: window.minimize();
                 }
             }
         }
