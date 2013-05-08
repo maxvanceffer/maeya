@@ -39,7 +39,7 @@ Rectangle {
             Text {
                 id: directionTitle
                 anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
-                color: "white"; font.pixelSize: 30
+                color: key === currentKey ? "yellow": "white"; font.pixelSize: key === currentKey ? 35 : 30;
                 text: title; font.bold: true;
             }
             Rectangle { height: 2; width: parent.width * 0.6; color: "grey";

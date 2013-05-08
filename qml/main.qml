@@ -21,9 +21,10 @@ Rectangle {
 
         onCurrentTitleChanged: {
             console.log("Left icon change");
-            leftButtonIcon.source  = "image://flags/"+currentKey;
-            leftButtonText.text    = currentTitle;
+            if( !open ) return;
+
             rightSideBar.otherPart = currentKey;
+
             onLeftMenu();
         }
     }
@@ -40,8 +41,8 @@ Rectangle {
 
         onCurrentTitleChanged: {
             console.log("Right icon change")
-            rightButtonIcon.source = "image://flags/"+currentKey;
-            rightButtonText.text   = currentTitle;
+            if( !open ) return;
+
             onRightMenu();
         }
     }
@@ -88,20 +89,22 @@ Rectangle {
 
     function layoutPortrait(){
         sourceTextRectangle.width  = (width/2) - 8;
-        sourceTextRectangle.height = height - bottomToolBar.height - 8;
+        sourceTextRectangle.height = height - ( bottomToolBar.height + topToolBar.height ) - 8;
         sourceTextRectangle.x      = 4;
         sourceTextRectangle.y      = topToolBar.height + 4;
 
         targetTextRectangle.width  = sourceTextRectangle.width;
         targetTextRectangle.height = sourceTextRectangle.height;
-        targetTextRectangle.x      = sourceTextRectangle.width;
-        targetTextRectangle.y      = sourceTextRectangle.y;
+        targetTextRectangle.x      = sourceTextRectangle.width + 8;
+        targetTextRectangle.y      = topToolBar.height + 4;
 
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
         leftSideBar.width  = appWindow.width;
 
-        change.rotation = 0;
+        change.rotation = 270;
+        change.anchors.right = targetTextRectangle.left;
+        change.anchors.rightMargin = -( change.width / 2 );
     }
 
     function layoutLandscape(){
@@ -119,7 +122,7 @@ Rectangle {
         leftSideBar.height = height;
         leftSideBar.width  = appWindow.width;
 
-        change.rotation = 90;
+        change.rotation = 180;
     }
 
     onWidthChanged: {
@@ -262,14 +265,14 @@ Rectangle {
                     smooth: true; width: 64; height: 64;
                     anchors.left: parent.left; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
-                    source: "image://flags/en";
+                    source: "image://flags/"+leftSideBar.currentKey;
                 }
 
                 Text {
                     id: leftButtonText;
                     anchors.left: leftButtonIcon.right; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
-                    text: leftSideBar.currentTitle ? leftSideBar.currentTitle : qsTr("Detect");
+                    text: leftSideBar.currentTitle;
                 }
 
                 MouseArea { id: ma_; anchors.fill: parent; onClicked: appWindow.onLeftMenu(); }
@@ -289,14 +292,14 @@ Rectangle {
                     width: 64; height: 64;
                     anchors.right: parent.right; anchors.margins: 4;
                     anchors.verticalCenter: parent.verticalCenter;
-                    source: "image://flags/en";
+                    source: "image://flags/" + rightSideBar.currentKey;
                 }
 
                 Text {
                     id: rightButtonText;
                     anchors.right: rightButtonIcon.left; anchors.margins: 6;
                     anchors.verticalCenter: parent.verticalCenter;
-                    text: rightSideBar.currentTitle ? rightSideBar.currentTitle : qsTr("Russian");
+                    text: rightSideBar.currentTitle;
                 }
 
                 MouseArea {
@@ -331,27 +334,19 @@ Rectangle {
 
                 SequentialAnimation {
                     id: sequentialOpacity
-                    running: false
+                    running: false;
+                    alwaysRunToEnd: true;
+                    PropertyAnimation {
+                        id: hardBeatAnimation1
+                        target: translateButton; easing.type: Easing.InOutQuad; properties: "width,height";
+                        from: 64; to: 120; duration: 800;
+                    }
+                    PropertyAnimation {
+                        id: hardBeatAnimation2
+                        target: translateButton; easing.type: Easing.InOutQuad; properties: "width,height";
+                        from: 120; to: 64; duration: 800;
+                    }
 
-                    NumberAnimation {
-                        id: animateOpacity
-                        target: translateButton
-                        properties: "opacity"
-                        from: 1
-                        to: 0
-                        duration: 600
-                        easing {type: Easing.InOutQuad; }
-                    }
-                    NumberAnimation {
-                        id: animateOpacity2
-                        target: translateButton
-                        properties: "opacity"
-                        to: 0
-                        from: 1
-                        duration: 600
-                        easing {type: Easing.InOutQuad;}
-                    }
-                    ColorAnimation { from: "gray"; to: "white"; duration: 200 }
                     loops: Animation.Infinite
                 }
             }
@@ -386,18 +381,28 @@ Rectangle {
 
         Image {
             id: change
-            width: 52; height: 52;
+            width: 64; height: 64;
             anchors.bottom: sourceTextRectangle.bottom;
-            source: "images/change.png";
+            source: "images/change.png"; z: 1000
             MouseArea {
                 rotation: 0
                 anchors.fill: parent;
                 onClicked: {
                     if( targetText.text.length ) {
+
+                        var sKey   = leftSideBar.currentKey;
+                        var sTitle = leftSideBar.currentTitle;
+                        var sText  = sourceText.text;
+
                         sourceText.text = targetText.text;
-                        leftSideBar.currentKey = rightSideBar.currentKey;
+                        targetText.text = sText;
+
+                        leftSideBar.currentKey   = rightSideBar.currentKey;
                         leftSideBar.currentTitle = rightSideBar.currentTitle;
-                        targetText.text = "";
+
+                        rightSideBar.currentKey   = sKey;
+                        rightSideBar.currentTitle = sTitle;
+
                         rightSideBar.dropIndex();
                     }
                 }
@@ -412,7 +417,7 @@ Rectangle {
                 id: targetText
                 anchors.fill: parent; anchors.margins: 6
                 font.pointSize: 14;
-                text: loader.translation;
+                text: loader.translation; readOnly: true;
                 onTextChanged: {
                     proccessing = false;
                     sequentialOpacity.stop();

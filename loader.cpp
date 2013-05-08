@@ -114,8 +114,9 @@ void Loader::transResponse()
 
     qDebug()<<"Response "<<m_trans;
 
-    XMLNode root = XMLNode::parseString(impl->readAll(),"Translation");
-    if( root.isEmpty() ) {
+    XMLResults res;
+    XMLNode root = XMLNode::parseString(impl->readAll(),"Translation",&res);
+    if( root.isEmpty() ||  res.error ) {
         qWarning()<<"XML response is empty";
         networkRequestTimeout.stop();
         emit timeoutTranslate();
