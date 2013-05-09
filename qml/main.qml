@@ -123,6 +123,7 @@ Rectangle {
         targetTextRectangle.anchors.right   = body.right;
         targetTextRectangle.anchors.top     = sourceTextRectangle.bottom;
         targetTextRectangle.anchors.bottom  = bottomToolBar.top;
+        targetTextRectangle.height          = sourceTextRectangle.height;
 
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
@@ -220,7 +221,6 @@ Rectangle {
                     id: aboutButton
                     width: 64; height: 64;
                     fillMode: Image.PreserveAspectFit
-//                    fillMode: Image.
                     source: "images/about.png"
                     MouseArea {
                         anchors.fill: parent;
@@ -392,7 +392,7 @@ Rectangle {
 
         Image {
             id: change
-            width: 64; height: 64;
+            width: 80; height: 80;
             fillMode: Image.PreserveAspectFit
             anchors.bottom: sourceTextRectangle.bottom;
             source: "images/change.png"; z: 999
