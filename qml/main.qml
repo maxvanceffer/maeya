@@ -88,15 +88,19 @@ Rectangle {
     }
 
     function layoutPortrait(){
-        sourceTextRectangle.width  = (width/2) - 8;
-        sourceTextRectangle.height = height - ( bottomToolBar.height + topToolBar.height ) - 8;
-        sourceTextRectangle.x      = 4;
-        sourceTextRectangle.y      = topToolBar.height + 4;
 
+        sourceTextRectangle.width  = (width/2) - 8;
+
+        sourceTextRectangle.anchors.margins = 4;
+        sourceTextRectangle.anchors.left    = body.left;
+        sourceTextRectangle.anchors.top     = topToolBar.bottom;
+        sourceTextRectangle.anchors.bottom  = bottomToolBar.top;
+
+        targetTextRectangle.anchors.margins = 4;
         targetTextRectangle.width  = sourceTextRectangle.width;
         targetTextRectangle.height = sourceTextRectangle.height;
-        targetTextRectangle.x      = sourceTextRectangle.width + 8;
-        targetTextRectangle.y      = topToolBar.height + 4;
+        targetTextRectangle.anchors.left = sourceTextRectangle.right;
+        targetTextRectangle.anchors.top = topToolBar.bottom;
 
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
@@ -108,21 +112,26 @@ Rectangle {
     }
 
     function layoutLandscape(){
-        sourceTextRectangle.width  = width - 8;
+        sourceTextRectangle.anchors.margins = 4;
+        sourceTextRectangle.anchors.left  = body.left;
         sourceTextRectangle.height = ((height - (bottomToolBar.height + topToolBar.height))/2) - 8;
-        sourceTextRectangle.x      = 4;
-        sourceTextRectangle.y      = topToolBar.height + 4;
+        sourceTextRectangle.anchors.top   = topToolBar.bottom;
+        sourceTextRectangle.anchors.right = body.right;
 
-        targetTextRectangle.width  = sourceTextRectangle.width - 2;
-        targetTextRectangle.height = sourceTextRectangle.height - 2;
-        targetTextRectangle.x      = 2;
-        targetTextRectangle.y      = topToolBar.height + sourceTextRectangle.height -2;
+        targetTextRectangle.anchors.margins = 4;
+        targetTextRectangle.anchors.left    = body.left;
+        targetTextRectangle.anchors.right   = body.right;
+        targetTextRectangle.anchors.top     = sourceTextRectangle.bottom;
+        targetTextRectangle.anchors.bottom  = bottomToolBar.top;
 
         leftSideBar.x = -(appWindow.width);
         leftSideBar.height = height;
         leftSideBar.width  = appWindow.width;
 
-        change.rotation = 180;
+        change.anchors.bottomMargin = -( change.width / 2 );
+        change.anchors.bottom       = sourceTextRectangle.bottom;
+        change.anchors.left         = sourceTextRectangle.left;
+        change.rotation = 0;
     }
 
     onWidthChanged: {
@@ -358,8 +367,10 @@ Rectangle {
             radius: 5;
             TextEdit {
                 id: sourceText
+                cursorVisible: true
+                wrapMode: TextEdit.WordWrap
                 anchors.fill: parent; anchors.margins: 6;
-                font.pointSize: 14
+                font.pointSize: 18
             }
 
             Behavior on y {
@@ -382,9 +393,11 @@ Rectangle {
         Image {
             id: change
             width: 64; height: 64;
+            fillMode: Image.PreserveAspectFit
             anchors.bottom: sourceTextRectangle.bottom;
-            source: "images/change.png"; z: 1000
+            source: "images/change.png"; z: 999
             MouseArea {
+                z: 1000
                 rotation: 0
                 anchors.fill: parent;
                 onClicked: {
@@ -416,7 +429,7 @@ Rectangle {
             TextEdit {
                 id: targetText
                 anchors.fill: parent; anchors.margins: 6
-                font.pointSize: 14;
+                font.pointSize: 18
                 text: loader.translation; readOnly: true;
                 onTextChanged: {
                     proccessing = false;

@@ -50,3 +50,9 @@ OTHER_FILES += \
     qtc_packaging/debian_harmattan/control \
     qtc_packaging/debian_harmattan/compat \
     qtc_packaging/debian_harmattan/changelog
+
+contains(MEEGO_EDITION,harmattan) {
+    icon.files = maeya.png
+    icon.path = /usr/share/icons/hicolor/80x80/apps
+    INSTALLS += icon
+}
