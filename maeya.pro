@@ -20,9 +20,9 @@ symbian:TARGET.CAPABILITY += NetworkServices
 # If your application uses the Qt Mobility libraries, uncomment
 # the following lines and add the respective components to the
 # MOBILITY variable.
-CONFIG += mobility
 MOBILITY += sensors
 
+TARGET += maeya
 SOURCES += main.cpp mainwindow.cpp \
     loader.cpp \
     xmlParser.cpp \
@@ -36,7 +36,7 @@ HEADERS += mainwindow.h \
 FORMS += mainwindow.ui
 RESOURCES += flags/resource.qrc
 QT += declarative core gui network
-CONFIG += qdbus
+CONFIG += qdbus mobility
 
 # Please do not modify the following two lines. Required for deployment.
 include(deployment.pri)

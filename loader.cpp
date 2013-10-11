@@ -82,6 +82,8 @@ void Loader::updateLanguages()
 
 void Loader::translate(QString from, QString to, QString text )
 {
+    m_trans.clear();
+
     QNetworkRequest req;
     QUrl url(api_host);
     url.setPath(api_path+api_translate);
@@ -125,6 +127,9 @@ void Loader::transResponse()
 
     XMLNode translationNode = root.getChildNode("text");
     m_trans = QString::fromUtf8(translationNode.getText());
+
+    if( m_trans.isEmpty() )
+        emit timeoutTranslate();
 
     emit translationUpdated(m_trans);
 }

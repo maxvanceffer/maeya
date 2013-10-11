@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QtCore/QCoreApplication>
+#include <QApplication>
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
 #include <QDBusConnection>
@@ -16,7 +16,8 @@
 #include "customimageprovider.h"
 #include "clipboard.h"
 
-QTM_USE_NAMESPACE
+using namespace QtMobility;
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {

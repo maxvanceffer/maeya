@@ -2,8 +2,9 @@
 #define ORIENTATATIONFILTER_H
 
 #include <QtSensors/QOrientationFilter>
+#include <QtSensors/QOrientationReading>
 
-QTM_USE_NAMESPACE
+using namespace QtMobility;
 
 class OrientationFilter : public QObject, public QOrientationFilter
 {
